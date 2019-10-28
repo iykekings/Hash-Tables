@@ -15,6 +15,7 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
+        # self.count = 0
 
 
     def _hash(self, key):
@@ -23,7 +24,8 @@ class HashTable:
 
         You may replace the Python hash with DJB2 as a stretch goal.
         '''
-        return hash(key)
+        numarr = sum([ord(x) for x in list(str(key))])
+        return (numarr + 200) % self.capacity
 
 
     def _hash_djb2(self, key):
@@ -52,6 +54,8 @@ class HashTable:
         Fill this in.
         '''
         pass
+        val = LinkedPair(key, value)
+        key = self._hash(key)
 
 
 
