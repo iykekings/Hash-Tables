@@ -1,6 +1,9 @@
 # '''
 # Linked List hash table key/value pair
 # '''
+from typing import List
+
+
 class LinkedPair:
     def __init__(self, key, value):
         self.key = key
@@ -14,8 +17,8 @@ class HashTable:
     '''
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
-        self.storage = [None] * capacity
-        # self.count = 0
+        self.storage: List[LinkedPair] = [None] * capacity
+        self.count = 0
 
 
     def _hash(self, key):
@@ -53,9 +56,18 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # create linkedpair
         val = LinkedPair(key, value)
+        #  create hash of the key
         key = self._hash(key)
+        # add val at key's index in storage if the current value there is None
+        if(not self.storage[key]):
+            self.storage[key] = val
+        # else add it to the next of the current value
+        else:
+            self.storage[key].next = val
+        
+
 
 
 
