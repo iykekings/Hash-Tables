@@ -18,7 +18,6 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage: List[LinkedPair] = [None] * capacity
-        self.count = 0
 
 
     def _hash(self, key) -> int:
@@ -27,8 +26,7 @@ class HashTable:
 
         You may replace the Python hash with DJB2 as a stretch goal.
         '''
-        numarr = sum([ord(x) for x in list(str(key))])
-        return (numarr + 200) % self.capacity
+        return hash(key)
 
 
     def _hash_djb2(self, key):
@@ -59,7 +57,7 @@ class HashTable:
         # create linkedpair
         val = LinkedPair(key, value)
         #  create hash of the key
-        key = self._hash(key)
+        key = self._hash_mod(key)
         # add val at key's index in storage if the current value there is None
         if(not self.storage[key]):
             self.storage[key] = val
@@ -87,7 +85,7 @@ class HashTable:
 
         Fill this in.
         '''
-        key_hash = self._hash(key)
+        key_hash = self._hash_mod(key)
         if(self.storage[key_hash]):
             current = self.storage[key_hash]
             if(current.key != key):
@@ -124,7 +122,19 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # doubles storages
+        self.capacity *= 2
+        #  fill up new storage
+        n_storage = [None] * self.capacity
+
+        # loop through and move from old to new storage
+        for l_pair in self.storage:
+            if l_pair is not None:
+                n_index = self._hash_mod(l_pair.key)
+                n_storage[n_index] = l_pair
+        # Update storage 
+        self.storage = n_storage
+
 
 
 
