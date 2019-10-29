@@ -87,9 +87,17 @@ class HashTable:
 
         Fill this in.
         '''
-        key = self._hash(key)
-        if(self.storage[key]):
-            self.storage[key] = None
+        key_hash = self._hash(key)
+        if(self.storage[key_hash]):
+            current = self.storage[key_hash]
+            if(current.key != key):
+                self.storage[key_hash] = current.next
+            else:
+                while(current.next != None):
+                    if(current.next.key == key):
+                        current.next = current.next.next
+                        return
+                    current = current.next
         else:
             print("No value with that key")
 
