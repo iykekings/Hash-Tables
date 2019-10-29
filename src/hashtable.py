@@ -1,7 +1,7 @@
 # '''
 # Linked List hash table key/value pair
 # '''
-from typing import List, Union
+from typing import List
 
 
 class LinkedPair:
@@ -55,25 +55,24 @@ class HashTable:
         Fill this in.
         '''
         # create linkedpair
-        val = LinkedPair(key, value)
+        linked_val = LinkedPair(key, value)
         #  create hash of the key
         key = self._hash_mod(key)
         # add val at key's index in storage if the current value there is None
         if(not self.storage[key]):
-            self.storage[key] = val
+            self.storage[key] = linked_val
         # else add it to the next of the current value
         else:
-            self.append_to_next(self.storage[key], val)
+            # iteratively find a suitable place for the new value
+            current = self.storage[key]
+            while(current != None):
+                if(current.next == None):
+                    current.next == linked_val
+                    return
+                current = current.next
+
         
 
-    def append_to_next(self, key: LinkedPair, val: LinkedPair):
-        '''
-        Uses recursion to append LinkedPair incase of similar key hashes
-        '''
-        if (not key.next):
-            key.next = val
-        else:
-            self.append_to_next(key.next, val)
 
 
 
@@ -109,8 +108,19 @@ class HashTable:
         Fill this in.
         '''
         #  genertae hash
-        key = self._hash(key)
+        key_hash = self._hash_mod(key)
         # check if the storage has a value at hash index and return it
+        if(self.storage[key_hash]):
+            current = self.storage[key_hash]
+            if(current.key == key):
+                return current
+            else:
+                while(current.next != None):
+                    if(current.next.key == key):
+                        return current.next
+                    current = current.next
+        else:
+            return None
         # else return None
         
 
