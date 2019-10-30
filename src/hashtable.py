@@ -9,6 +9,23 @@ class LinkedPair:
         self.key = key
         self.value = value
         self.next = None
+    
+    def append(self, key, value):
+        if self.key == key:
+            self.value = value
+        elif not self.next:
+            self.next = LinkedPair(key, value)
+        else:
+            self.next.append(key, value)
+
+    def retrieve(self, key):
+        if self.key == key:
+            return self.value
+        elif not self.next:
+            print(f"Hash[{key}] is undefined")
+            return None
+        else:
+            return self.next.retrieve(key)
 
 class HashTable:
     '''
@@ -17,7 +34,7 @@ class HashTable:
     '''
     def __init__(self, capacity):
         self.capacity = capacity  # Number of buckets in the hash table
-        self.storage: List[LinkedPair] = [None] * capacity
+        self.storage = [None] * capacity
 
 
     def _hash(self, key) -> int:
@@ -59,14 +76,14 @@ class HashTable:
         #  create hash of the key
         key = self._hash_mod(key)
         # add val at key's index in storage if the current value there is None
-        if(not self.storage[key]):
+        if(self.storage[key] is None):
             self.storage[key] = linked_val
         # else add it to the next of the current value
         else:
             # iteratively find a suitable place for the new value
             current = self.storage[key]
-            while(current != None):
-                if(current.next == None):
+            while(current is not None):
+                if(current.next is None):
                     current.next == linked_val
                     return
                 current = current.next
@@ -160,6 +177,7 @@ if __name__ == "__main__":
     # Test storing beyond capacity
     print(ht.retrieve("line_1"))
     print(ht.retrieve("line_2"))
+    print(ht.retrieve("line_2").next)
     print(ht.retrieve("line_3"))
 
     # Test resizing
