@@ -76,14 +76,14 @@ class HashTable:
         # create linkedpair
         linked_val = LinkedPair(key, value)
         #  create hash of the key
-        key = self._hash_mod(key)
+        key_hash = self._hash_mod(key)
         # add val at key's index in storage if the current value there is None
-        if(self.storage[key] is None):
-            self.storage[key] = linked_val
+        if(self.storage[key_hash] is None):
+            self.storage[key_hash] = linked_val
         # else add it to the next of the current value
         else:
             # append to linkedpair at that same position
-            self.storage[key].append(key, linked_val)
+            self.storage[key_hash].append(key, linked_val)
             
 
         
@@ -111,7 +111,7 @@ class HashTable:
                         return
                     current = current.next
         else:
-            print("No value with that key")
+            print("No Hash with that key")
 
 
     def retrieve(self, key):
