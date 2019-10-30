@@ -22,7 +22,6 @@ class LinkedPair:
         if self.key == key:
             return self.value
         elif not self.next:
-            print(f"Hash[{key}] is undefined")
             return None
         else:
             return self.next.retrieve(key)
@@ -80,13 +79,9 @@ class HashTable:
             self.storage[key] = linked_val
         # else add it to the next of the current value
         else:
-            # iteratively find a suitable place for the new value
-            current = self.storage[key]
-            while(current is not None):
-                if(current.next is None):
-                    current.next == linked_val
-                    return
-                current = current.next
+            # append to linkedpair at that same position
+            self.storage[key].append(key, linked_val)
+            
 
         
 
@@ -124,18 +119,11 @@ class HashTable:
 
         Fill this in.
         '''
-        #  genertae hash
+        #  generate hash
         key_hash = self._hash_mod(key)
-        # check if the storage has a value at hash index and return it
-        if(self.storage[key_hash]):
-            current = self.storage[key_hash]
-            if(current.key == key):
-                return current
-            else:
-                while(current.next != None):
-                    if(current.next.key == key):
-                        return current.next
-                    current = current.next
+        # check if the storage has a value at hash index
+        if self.storage[key_hash]:
+            return self.storage[key_hash].retrieve(key)
         else:
             return None
         # else return None
@@ -177,7 +165,6 @@ if __name__ == "__main__":
     # Test storing beyond capacity
     print(ht.retrieve("line_1"))
     print(ht.retrieve("line_2"))
-    print(ht.retrieve("line_2").next)
     print(ht.retrieve("line_3"))
 
     # Test resizing
