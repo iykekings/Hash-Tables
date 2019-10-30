@@ -73,17 +73,11 @@ class HashTable:
         # check is Hashtable is filled and resize
         if not None in self.storage:
             self.resize()
-        # create linkedpair
-        linked_val = LinkedPair(key, value)
-        #  create hash of the key
         key_hash = self._hash_mod(key)
-        # add val at key's index in storage if the current value there is None
-        if(self.storage[key_hash] is None):
-            self.storage[key_hash] = linked_val
-        # else add it to the next of the current value
+        if self.storage[key_hash]:
+            self.storage[key_hash].append(key, value)
         else:
-            # append to linkedpair at that same position
-            self.storage[key_hash].append(key, linked_val)
+            self.storage[key_hash] = LinkedPair(key, value)
             
 
         
