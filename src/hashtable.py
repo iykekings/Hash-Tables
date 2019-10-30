@@ -94,18 +94,24 @@ class HashTable:
         Fill this in.
         '''
         key_hash = self._hash_mod(key)
-        if(self.storage[key_hash]):
-            current = self.storage[key_hash]
-            if(current.key != key):
-                self.storage[key_hash] = current.next
-            else:
-                while(current.next != None):
-                    if(current.next.key == key):
-                        current.next = current.next.next
-                        return
-                    current = current.next
+        if not self.storage[key_hash]:
+            print("No hash with that key")
+            return
+
+        current = self.storage[key_hash]
+        prev_node = None
+
+        if current.key == key and not current.next:
+            self.storage[key_hash] = None
+        elif current.key == key:
+            self.storage[key_hash] = self.storage[key_hash].next
         else:
-            print("No Hash with that key")
+            while current:
+                if current.key == key:
+                    prev_node.next = current.next
+                    return
+                prev_node = current
+                current = current.next
 
 
     def retrieve(self, key):
