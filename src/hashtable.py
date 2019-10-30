@@ -143,15 +143,17 @@ class HashTable:
         # doubles storages
         self.capacity *= 2
         #  fill up new storage
-        n_storage = [None] * self.capacity
+        prev_storage = self.storage
+        self.storage = [None] * self.capacity
 
         # loop through and move from old to new storage
-        for l_pair in self.storage:
-            if l_pair is not None:
-                n_index = self._hash_mod(l_pair.key)
-                n_storage[n_index] = l_pair
-        # Update storage 
-        self.storage = n_storage
+        for node in prev_storage:
+            if node:
+                current = node
+                while current:
+                    self.insert(current.key, current.value)
+                    current = current.next
+
 
 
 
