@@ -70,6 +70,9 @@ class HashTable:
 
         Fill this in.
         '''
+        # check is Hashtable is filled and resize
+        if not None in self.storage:
+            self.resize()
         # create linkedpair
         linked_val = LinkedPair(key, value)
         #  create hash of the key
