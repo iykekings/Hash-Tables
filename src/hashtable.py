@@ -1,11 +1,30 @@
 # '''
 # Linked List hash table key/value pair
 # '''
+from typing import List
+
+
 class LinkedPair:
     def __init__(self, key, value):
         self.key = key
         self.value = value
         self.next = None
+    
+    def append(self, key, value):
+        if self.key == key:
+            self.value = value
+        elif not self.next:
+            self.next = LinkedPair(key, value)
+        else:
+            self.next.append(key, value)
+
+    def retrieve(self, key):
+        if self.key == key:
+            return self.value
+        elif not self.next:
+            return None
+        else:
+            return self.next.retrieve(key)
 
 class HashTable:
     '''
@@ -17,7 +36,7 @@ class HashTable:
         self.storage = [None] * capacity
 
 
-    def _hash(self, key):
+    def _hash(self, key) -> int:
         '''
         Hash an arbitrary key and return an integer.
 
@@ -51,7 +70,18 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # check is Hashtable is filled and resize
+        if not None in self.storage:
+            self.resize()
+        key_hash = self._hash_mod(key)
+        if self.storage[key_hash]:
+            self.storage[key_hash].append(key, value)
+        else:
+            self.storage[key_hash] = LinkedPair(key, value)
+            
+
+        
+
 
 
 
@@ -63,7 +93,25 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        key_hash = self._hash_mod(key)
+        if not self.storage[key_hash]:
+            print("No hash with that key")
+            return
+
+        current = self.storage[key_hash]
+        prev_node = None
+
+        if current.key == key and not current.next:
+            self.storage[key_hash] = None
+        elif current.key == key:
+            self.storage[key_hash] = self.storage[key_hash].next
+        else:
+            while current:
+                if current.key == key:
+                    prev_node.next = current.next
+                    return
+                prev_node = current
+                current = current.next
 
 
     def retrieve(self, key):
@@ -74,7 +122,15 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        #  generate hash
+        key_hash = self._hash_mod(key)
+        # check if the storage has a value at hash index
+        if self.storage[key_hash]:
+            return self.storage[key_hash].retrieve(key)
+        else:
+            return None
+        # else return None
+        
 
 
     def resize(self):
@@ -84,7 +140,21 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # doubles storages
+        self.capacity *= 2
+        #  fill up new storage
+        prev_storage = self.storage
+        self.storage = [None] * self.capacity
+
+        # loop through and move from old to new storage
+        for node in prev_storage:
+            if node:
+                current = node
+                while current:
+                    self.insert(current.key, current.value)
+                    current = current.next
+
+
 
 
 
